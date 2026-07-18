@@ -1,65 +1,67 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, Flame } from "lucide-react";
+import { Hero } from "@/components/Hero";
+import { CategoryGrid } from "@/components/CategoryGrid";
+import { ProductGrid } from "@/components/ProductGrid";
+import { Testimonials } from "@/components/Testimonials";
+import { Newsletter } from "@/components/Newsletter";
+import { products } from "@/data/products";
 
 export default function Home() {
+  const newProducts = products.filter((p) => p.isNew).slice(0, 4);
+  const dealProducts = products
+    .filter((p) => p.originalPrice)
+    .sort((a, b) => (b.originalPrice! - b.price) / b.price - (a.originalPrice! - a.price) / a.price)
+    .slice(0, 4);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div>
+      <Hero />
+
+      <section className="container-page py-16">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl font-extrabold text-brand-navy sm:text-3xl">קטגוריות הקורסים</h2>
+          <p className="mt-2 text-neutral-500">בחרו את התחום שהכי מדבר אליכם והתחילו ללמוד היום</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <CategoryGrid />
+      </section>
+
+      {newProducts.length > 0 && (
+        <section className="container-page py-8">
+          <div className="mb-6 flex items-end justify-between">
+            <div>
+              <h2 className="text-2xl font-extrabold text-brand-navy sm:text-3xl">קורסים חדשים</h2>
+              <p className="mt-2 text-neutral-500">התוכן העדכני ביותר שלנו</p>
+            </div>
+            <Link href="/shop" className="hidden shrink-0 items-center gap-1 text-sm font-bold text-brand-blue sm:flex">
+              לכל הקורסים <ArrowLeft size={16} />
+            </Link>
+          </div>
+          <ProductGrid products={newProducts} />
+        </section>
+      )}
+
+      {dealProducts.length > 0 && (
+        <section className="bg-brand-gray py-8">
+          <div className="container-page">
+            <div className="mb-6 flex items-end justify-between">
+              <div>
+                <h2 className="flex items-center gap-2 text-2xl font-extrabold text-brand-navy sm:text-3xl">
+                  <Flame className="text-brand-blue" /> מבצעים חמים
+                </h2>
+                <p className="mt-2 text-neutral-500">הזדמנות להתחיל עם ההנחה הכי גבוהה שיש</p>
+              </div>
+              <Link href="/shop?sort=discount" className="hidden shrink-0 items-center gap-1 text-sm font-bold text-brand-blue sm:flex">
+                לכל המבצעים <ArrowLeft size={16} />
+              </Link>
+            </div>
+            <ProductGrid products={dealProducts} />
+          </div>
+        </section>
+      )}
+
+      <Testimonials />
+      <Newsletter />
     </div>
   );
 }
