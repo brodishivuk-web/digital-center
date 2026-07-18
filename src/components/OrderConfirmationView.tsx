@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CheckCircle2, Mail, Zap, ArrowLeft } from "lucide-react";
+import { CheckCircle2, Mail, Zap, ArrowLeft, GraduationCap } from "lucide-react";
 import { formatPrice } from "@/lib/format";
+import { getProductById } from "@/data/products";
 import type { Order } from "@/lib/types";
 
 const LAST_ORDER_KEY = "digital-center-last-order";
@@ -41,9 +42,14 @@ export function OrderConfirmationView() {
           {orderNumber ? `מספר הזמנה ${orderNumber}. ` : ""}
           פרטי ההזמנה המלאים נשלחו לכתובת המייל שלכם.
         </p>
-        <Link href="/shop" className="mt-2 inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-bold text-white">
-          המשך לחנות <ArrowLeft size={16} />
-        </Link>
+        <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row">
+          <Link href="/my-courses" className="inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-bold text-white">
+            לקורסים שלי <GraduationCap size={16} />
+          </Link>
+          <Link href="/shop" className="inline-flex items-center gap-2 rounded-full border border-brand-border px-6 py-3 text-sm font-bold text-brand-navy">
+            המשך לחנות <ArrowLeft size={16} />
+          </Link>
+        </div>
       </div>
     );
   }
@@ -69,14 +75,27 @@ export function OrderConfirmationView() {
           </div>
 
           <div className="flex flex-col gap-3 border-b border-brand-border py-4">
-            {order.lines.map((line) => (
-              <div key={`${line.productId}-${line.variantId}`} className="flex justify-between text-sm">
-                <span className="text-neutral-600">
-                  {line.productName} <span className="text-neutral-400">({line.variantName}) x{line.quantity}</span>
-                </span>
-                <span className="font-semibold text-brand-navy">{formatPrice(line.unitPrice * line.quantity)}</span>
-              </div>
-            ))}
+            {order.lines.map((line) => {
+              const product = getProductById(line.productId);
+              return (
+                <div key={`${line.productId}-${line.variantId}`} className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+                  <span className="text-sm text-neutral-600">
+                    {line.productName} <span className="text-neutral-400">({line.variantName}) x{line.quantity}</span>
+                  </span>
+                  <div className="flex items-center justify-between gap-3 sm:justify-end">
+                    <span className="text-sm font-semibold text-brand-navy">{formatPrice(line.unitPrice * line.quantity)}</span>
+                    {product && (
+                      <Link
+                        href={`/learn/${product.slug}`}
+                        className="inline-flex items-center gap-1 rounded-full bg-brand-blue-light px-3 py-1.5 text-xs font-bold text-brand-blue transition hover:bg-brand-blue hover:text-white"
+                      >
+                        <GraduationCap size={14} /> התחילו ללמוד
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex justify-between pt-4 text-base font-extrabold text-brand-navy">
@@ -89,12 +108,20 @@ export function OrderConfirmationView() {
           <Mail size={16} /> אישור מפורט ופרטי גישה נשלחו לתיבת המייל שלכם
         </div>
 
-        <Link
-          href="/shop"
-          className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-blue-dark"
-        >
-          המשך לקורסים נוספים <ArrowLeft size={16} />
-        </Link>
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            href="/my-courses"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-blue-dark"
+          >
+            למעבר לקורסים שלי <GraduationCap size={16} />
+          </Link>
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-2 rounded-full border border-brand-border px-6 py-3 text-sm font-bold text-brand-navy transition hover:bg-brand-gray"
+          >
+            המשך לקורסים נוספים <ArrowLeft size={16} />
+          </Link>
+        </div>
       </div>
     </div>
   );

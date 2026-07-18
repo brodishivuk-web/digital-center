@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Search, ShoppingCart, Menu, X, Zap } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, Zap, GraduationCap } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { categories } from "@/data/categories";
 
@@ -70,6 +70,15 @@ export function Header() {
         </form>
 
         <Link
+          href="/my-courses"
+          className="hidden shrink-0 items-center gap-1.5 rounded-full p-2 text-sm font-semibold text-brand-navy transition hover:bg-brand-gray sm:flex"
+          aria-label="הקורסים שלי"
+        >
+          <GraduationCap size={20} />
+          <span className="hidden lg:inline">הקורסים שלי</span>
+        </Link>
+
+        <Link
           href="/cart"
           className="relative flex shrink-0 items-center gap-2 rounded-full p-2 transition hover:bg-brand-gray md:mr-0"
           aria-label="עגלת קניות"
@@ -98,6 +107,13 @@ export function Header() {
           <nav className="flex flex-col gap-1 text-sm font-semibold text-brand-navy">
             <Link href="/shop" className="rounded-lg px-2 py-2.5 hover:bg-brand-gray" onClick={() => setMenuOpen(false)}>
               כל הקורסים
+            </Link>
+            <Link
+              href="/my-courses"
+              className="flex items-center gap-2 rounded-lg px-2 py-2.5 hover:bg-brand-gray"
+              onClick={() => setMenuOpen(false)}
+            >
+              <GraduationCap size={16} /> הקורסים שלי
             </Link>
             {categories.map((c) => (
               <Link

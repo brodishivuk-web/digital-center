@@ -7,6 +7,7 @@ import { CreditCard, Zap, ShieldCheck, ArrowLeft } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { getProductById } from "@/data/products";
 import { formatPrice } from "@/lib/format";
+import { addPurchasedProductIds } from "@/lib/purchases";
 import type { Order } from "@/lib/types";
 
 const LAST_ORDER_KEY = "digital-center-last-order";
@@ -66,6 +67,7 @@ export function CheckoutView() {
 
       const order = data.order as Order;
       window.localStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
+      addPurchasedProductIds(lines.map((l) => l.productId));
       clearCart();
       router.push(`/order-confirmation?order=${order.orderNumber}`);
     } catch {
