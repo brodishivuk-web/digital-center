@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Lock, GraduationCap, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Lock, GraduationCap, ArrowLeft, CheckCircle2, Lightbulb, ClipboardList } from "lucide-react";
 import type { Product } from "@/lib/types";
 import type { CourseModuleContent } from "@/data/lessons";
 import { hasPurchased } from "@/lib/purchases";
 import { getCategory } from "@/data/categories";
 import { ProductImage } from "@/components/ProductImage";
+import { LessonVisual } from "@/components/LessonVisual";
 
 export function LearnView({ product, modules }: { product: Product; modules: CourseModuleContent[] }) {
   const [status, setStatus] = useState<"checking" | "locked" | "unlocked">("checking");
@@ -54,15 +55,20 @@ export function LearnView({ product, modules }: { product: Product; modules: Cou
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-10">
+      <div className="mx-auto flex max-w-3xl flex-col gap-12">
         {modules.map((module, mi) => (
           <div key={module.title}>
-            <h2 className="mb-4 flex items-center gap-2 text-lg font-extrabold text-brand-navy">
+            <h2 className="mb-5 flex items-center gap-2 text-lg font-extrabold text-brand-navy">
               <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue text-xs font-bold text-white">
                 {mi + 1}
               </span>
               {module.title}
             </h2>
+
+            <div className="mb-6 rounded-2xl border border-brand-border bg-white p-5 sm:p-6">
+              <LessonVisual visual={module.visual} />
+            </div>
+
             <div className="flex flex-col gap-4">
               {module.lessons.map((lesson) => (
                 <div key={lesson.title} className="rounded-2xl border border-brand-border bg-white p-5">
@@ -74,6 +80,35 @@ export function LearnView({ product, modules }: { product: Product; modules: Cou
                     {lesson.body.map((paragraph, pi) => (
                       <p key={pi}>{paragraph}</p>
                     ))}
+                  </div>
+
+                  <div className="mt-4 rounded-xl border border-brand-border bg-brand-gray p-4">
+                    <p className="mb-2 flex items-center gap-1.5 text-xs font-extrabold text-brand-navy">
+                      <Lightbulb size={14} className="text-brand-blue" /> {lesson.example.label}
+                    </p>
+                    <ul className="flex flex-col gap-1.5">
+                      {lesson.example.content.map((line, li) => (
+                        <li key={li} className="text-xs leading-relaxed text-neutral-600">
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-3 rounded-xl border border-brand-blue/30 bg-brand-blue-light p-4">
+                    <p className="mb-2 flex items-center gap-1.5 text-xs font-extrabold text-brand-blue">
+                      <ClipboardList size={14} /> {lesson.exercise.title}
+                    </p>
+                    <ol className="flex flex-col gap-1.5">
+                      {lesson.exercise.steps.map((step, si) => (
+                        <li key={si} className="flex items-start gap-2 text-xs leading-relaxed text-brand-navy">
+                          <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-brand-blue text-[10px] font-bold text-white">
+                            {si + 1}
+                          </span>
+                          {step}
+                        </li>
+                      ))}
+                    </ol>
                   </div>
                 </div>
               ))}
