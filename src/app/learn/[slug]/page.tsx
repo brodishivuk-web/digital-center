@@ -22,8 +22,8 @@ export async function generateMetadata({
 export default async function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = getProduct(slug);
-  const modules = getCourseContent(slug);
-  if (!product || !modules) notFound();
+  const content = getCourseContent(slug);
+  if (!product || !content) notFound();
 
-  return <LearnView product={product} modules={modules} />;
+  return <LearnView product={product} content={content} />;
 }
