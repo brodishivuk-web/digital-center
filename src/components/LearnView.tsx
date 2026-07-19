@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Lock, GraduationCap, ArrowLeft, CheckCircle2, ClipboardList, Rocket, Target, Wrench } from "lucide-react";
+import { Lock, GraduationCap, ArrowLeft, CheckCircle2, ClipboardList, Rocket, Target, Wrench, AlertTriangle, Sparkles } from "lucide-react";
 import type { Product } from "@/lib/types";
 import type { CourseContent } from "@/data/lessons";
 import { hasPurchased } from "@/lib/purchases";
@@ -114,11 +114,11 @@ export function LearnView({ product, content }: { product: Product; content: Cou
 
             <div className="flex flex-col gap-4">
               {module.lessons.map((lesson) => {
-                const seed = lessonSeed++;
+                const examples = lesson.examples && lesson.examples.length > 0 ? lesson.examples : lesson.example ? [lesson.example] : [];
                 return (
-                  <div key={lesson.title} className="rounded-2xl border border-brand-border bg-white p-5">
-                    <h3 className="mb-2 flex items-center gap-2 text-sm font-bold text-brand-navy">
-                      <CheckCircle2 size={16} className="shrink-0 text-brand-blue" />
+                  <div key={lesson.title} className="rounded-2xl border border-brand-border bg-white p-5 sm:p-7">
+                    <h3 className="mb-3 flex items-center gap-2 text-base font-bold text-brand-navy">
+                      <CheckCircle2 size={18} className="shrink-0 text-brand-blue" />
                       {lesson.title}
                     </h3>
                     <div className="flex flex-col gap-2 text-sm leading-relaxed text-neutral-600">
@@ -127,9 +127,43 @@ export function LearnView({ product, content }: { product: Product; content: Cou
                       ))}
                     </div>
 
-                    <div className="mt-4">
-                      <LessonExampleVisual label={lesson.example.label} content={lesson.example.content} seed={seed} />
+                    {lesson.sections && lesson.sections.length > 0 && (
+                      <div className="mt-5 flex flex-col gap-4 border-t border-brand-border pt-5">
+                        {lesson.sections.map((section, si) => (
+                          <div key={si}>
+                            <h4 className="mb-1.5 text-sm font-extrabold text-brand-navy">{section.heading}</h4>
+                            <div className="flex flex-col gap-2 text-sm leading-relaxed text-neutral-600">
+                              {section.paragraphs.map((p, pi) => (
+                                <p key={pi}>{p}</p>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="mt-5 flex flex-col gap-3">
+                      {examples.map((ex, ei) => {
+                        const seed = lessonSeed++;
+                        return <LessonExampleVisual key={ei} label={ex.label} content={ex.content} seed={seed} />;
+                      })}
                     </div>
+
+                    {lesson.commonMistakes && lesson.commonMistakes.length > 0 && (
+                      <div className="mt-3 rounded-xl border border-amber-300/60 bg-amber-50 p-4">
+                        <p className="mb-2 flex items-center gap-1.5 text-xs font-extrabold text-amber-700">
+                          <AlertTriangle size={14} /> טעויות נפוצות שכדאי להימנע מהן
+                        </p>
+                        <ul className="flex flex-col gap-1.5">
+                          {lesson.commonMistakes.map((mistake, mi2) => (
+                            <li key={mi2} className="flex items-start gap-2 text-xs leading-relaxed text-amber-900">
+                              <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-amber-600" />
+                              {mistake}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                     <div className="mt-3 rounded-xl border border-brand-blue/30 bg-brand-blue-light p-4">
                       <p className="mb-2 flex items-center gap-1.5 text-xs font-extrabold text-brand-blue">
@@ -146,6 +180,22 @@ export function LearnView({ product, content }: { product: Product; content: Cou
                         ))}
                       </ol>
                     </div>
+
+                    {lesson.summary && lesson.summary.length > 0 && (
+                      <div className="mt-3 rounded-xl bg-brand-navy p-4">
+                        <p className="mb-2 flex items-center gap-1.5 text-xs font-extrabold text-white">
+                          <Sparkles size={14} className="text-brand-blue" /> בקצרה - נקודות מפתח
+                        </p>
+                        <ul className="flex flex-col gap-1.5">
+                          {lesson.summary.map((point, pi2) => (
+                            <li key={pi2} className="flex items-start gap-2 text-xs leading-relaxed text-white/80">
+                              <CheckCircle2 size={12} className="mt-0.5 shrink-0 text-brand-blue" />
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 );
               })}
