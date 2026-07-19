@@ -619,6 +619,7 @@ export const courseContent: Record<string, CourseContent> = {
       visual: {
         type: "mockup",
         kind: "feed",
+        platform: "instagram",
         blocks: ["טיפ שבועי", "מאחורי הקלעים", "תוצאת לקוח", "שאלות נפוצות", "מבצע", "סטורי היילייט"],
       },
       lessons: [
@@ -882,6 +883,7 @@ export const courseContent: Record<string, CourseContent> = {
       visual: {
         type: "mockup",
         kind: "timeline",
+        platform: "capcut",
         blocks: ["וו", "קאט", "ערך 1", "קאט", "ערך 2", "CTA"],
       },
       lessons: [
@@ -1124,11 +1126,19 @@ export const courseContent: Record<string, CourseContent> = {
     {
       title: "יסודות",
       visual: {
-        type: "funnel",
-        stages: [
-          { label: "חיפוש מידע", value: "\"מה זה SEO\"" },
-          { label: "השוואה", value: "\"קורס SEO מומלץ\"" },
-          { label: "כוונת קנייה", value: "\"קורס SEO מחיר\"" },
+        type: "search",
+        query: "קידום אתרים למתחילים",
+        results: [
+          {
+            url: "www.example-agency.co.il › seo-guide",
+            title: "מדריך SEO למתחילים - כל מה שצריך לדעת ב-2026",
+            snippet: "מדריך מקיף המסביר את יסודות קידום האתרים בגוגל, כולל מחקר מילות מפתח ואופטימיזציה.",
+          },
+          {
+            url: "www.example-shop.co.il › blog › seo",
+            title: "5 טעויות SEO שגורמות לאתר שלכם לא להופיע בגוגל",
+            snippet: "הטעויות הנפוצות ביותר שמונעות מאתרים לדרג, ואיך לתקן אותן צעד אחר צעד.",
+          },
         ],
       },
       lessons: [
@@ -1705,6 +1715,7 @@ export const courseContent: Record<string, CourseContent> = {
       visual: {
         type: "mockup",
         kind: "chat",
+        platform: "chatgpt",
         blocks: [
           "היי, מה שעות הפעילות שלכם?",
           "אנחנו פתוחים א׳-ה׳ 9:00-18:00, ובשישי עד 14:00 🙂",
@@ -1863,6 +1874,7 @@ export const courseContent: Record<string, CourseContent> = {
       visual: {
         type: "mockup",
         kind: "timeline",
+        platform: "capcut",
         blocks: ["סצנה 1", "סצנה 2", "סצנה 3", "כתוביות"],
       },
       lessons: [
@@ -2263,6 +2275,7 @@ export const courseContent: Record<string, CourseContent> = {
       visual: {
         type: "mockup",
         kind: "timeline",
+        platform: "capcut",
         blocks: ["קליפ 1", "קליפ 2", "טקסט", "מוזיקה"],
       },
       lessons: [

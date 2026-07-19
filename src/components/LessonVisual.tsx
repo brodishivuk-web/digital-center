@@ -1,5 +1,20 @@
-import { Check, X, MessageCircle, Image as ImageIcon, Film, LayoutGrid } from "lucide-react";
-import type { VisualSpec } from "@/data/visualTypes";
+import {
+  Check,
+  X,
+  MessageCircle,
+  Image as ImageIcon,
+  Film,
+  LayoutGrid,
+  Sparkles,
+  Send,
+  Scissors,
+  Type,
+  Music,
+  Wand2,
+  Search,
+  Grid3x3,
+} from "lucide-react";
+import type { MockupPlatform, VisualSpec } from "@/data/visualTypes";
 
 function StepsVisual({ steps }: { steps: { label: string; description: string }[] }) {
   return (
@@ -142,59 +157,157 @@ const MOCKUP_ICONS = {
   dashboard: ImageIcon,
 };
 
-function MockupVisual({ kind, blocks }: { kind: "chat" | "feed" | "timeline" | "dashboard"; blocks: string[] }) {
+const MOCKUP_LABELS: Record<string, string> = {
+  chat: "צ׳אט",
+  feed: "פיד",
+  timeline: "ציר עריכה",
+  dashboard: "לוח בקרה",
+  chatgpt: "ChatGPT",
+  instagram: "אינסטגרם",
+  capcut: "CapCut",
+};
+
+function MockupVisual({
+  kind,
+  platform,
+  blocks,
+}: {
+  kind: "chat" | "feed" | "timeline" | "dashboard";
+  platform?: MockupPlatform;
+  blocks: string[];
+}) {
   const Icon = MOCKUP_ICONS[kind];
+  const isDark = platform === "capcut";
 
   return (
-    <div className="mx-auto max-w-md overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm">
-      <div className="flex items-center gap-1.5 border-b border-brand-border bg-brand-gray px-3 py-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-        <span className="mr-auto flex items-center gap-1.5 text-[11px] font-semibold text-neutral-400">
+    <div
+      className={`mx-auto max-w-md overflow-hidden rounded-2xl border shadow-sm ${
+        isDark ? "border-neutral-800 bg-[#0f0f12]" : "border-brand-border bg-white"
+      }`}
+    >
+      <div
+        className={`flex items-center gap-1.5 border-b px-3 py-2 ${
+          isDark ? "border-neutral-800 bg-[#17171b]" : "border-brand-border bg-brand-gray"
+        }`}
+      >
+        <span className={`h-2.5 w-2.5 rounded-full ${isDark ? "bg-neutral-600" : "bg-neutral-300"}`} />
+        <span className={`h-2.5 w-2.5 rounded-full ${isDark ? "bg-neutral-600" : "bg-neutral-300"}`} />
+        <span className={`h-2.5 w-2.5 rounded-full ${isDark ? "bg-neutral-600" : "bg-neutral-300"}`} />
+        <span className={`mr-auto flex items-center gap-1.5 text-[11px] font-semibold ${isDark ? "text-neutral-400" : "text-neutral-400"}`}>
           <Icon size={12} />
-          {kind === "chat" ? "צ׳אט" : kind === "feed" ? "פיד" : kind === "timeline" ? "ציר עריכה" : "לוח בקרה"}
+          {MOCKUP_LABELS[platform ?? kind]}
         </span>
       </div>
 
       {kind === "timeline" ? (
-        <div className="flex flex-col gap-2 p-4">
-          <div className="flex gap-1">
-            {blocks.map((b, i) => (
+        <div className={`flex ${isDark ? "" : "flex-col gap-2 p-4"}`}>
+          {isDark ? (
+            <>
+              <div className="flex w-11 shrink-0 flex-col items-center gap-4 border-l border-neutral-800 bg-[#141417] py-4">
+                {[Scissors, Type, Music, Wand2].map((ToolIcon, i) => (
+                  <span key={i} className="flex h-6 w-6 items-center justify-center rounded-md text-neutral-400">
+                    <ToolIcon size={14} />
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-1 flex-col gap-2 p-4">
+                <div className="flex justify-between px-0.5 text-[9px] text-neutral-500" dir="ltr">
+                  <span>00:00</span>
+                  <span>00:15</span>
+                  <span>00:30</span>
+                </div>
+                <div className="relative flex gap-1">
+                  <span className="absolute top-[-4px] right-1/3 h-[calc(100%+8px)] w-0.5 rounded bg-white" />
+                  {blocks.map((b) => (
+                    <div
+                      key={b}
+                      className="flex h-12 flex-1 items-center justify-center rounded-md bg-gradient-to-b from-brand-blue to-brand-blue-dark text-center text-[10px] font-bold leading-tight text-white"
+                    >
+                      {b}
+                    </div>
+                  ))}
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-neutral-800" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex gap-1">
+                {blocks.map((b) => (
+                  <div
+                    key={b}
+                    className="flex h-12 flex-1 items-center justify-center rounded-md bg-gradient-to-b from-brand-blue to-brand-blue-dark text-center text-[10px] font-bold leading-tight text-white"
+                  >
+                    {b}
+                  </div>
+                ))}
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-brand-gray" />
+            </>
+          )}
+        </div>
+      ) : kind === "feed" ? (
+        <div>
+          {platform === "instagram" && (
+            <div className="flex items-center gap-2.5 border-b border-brand-border px-3 py-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 p-[2px]">
+                <span className="flex h-full w-full items-center justify-center rounded-full bg-white text-[10px] font-bold text-brand-navy">
+                  DC
+                </span>
+              </span>
+              <span className="text-xs font-bold text-brand-navy">the_business_page</span>
+              <span className="mr-auto rounded-md bg-brand-blue px-2.5 py-1 text-[10px] font-bold text-white">עקוב</span>
+            </div>
+          )}
+          <div className="grid grid-cols-3 gap-[2px] p-[2px]">
+            {blocks.map((b) => (
               <div
                 key={b}
-                className="flex h-12 flex-1 items-center justify-center rounded-md bg-gradient-to-b from-brand-blue to-brand-blue-dark text-center text-[10px] font-bold leading-tight text-white"
+                className="flex aspect-square items-center justify-center bg-gradient-to-br from-brand-blue to-brand-blue-dark p-1.5 text-center text-[9px] font-bold leading-tight text-white"
               >
                 {b}
               </div>
             ))}
           </div>
-          <div className="h-1.5 w-full rounded-full bg-brand-gray" />
-        </div>
-      ) : kind === "feed" ? (
-        <div className="grid grid-cols-3 gap-1 p-2">
-          {blocks.map((b) => (
-            <div
-              key={b}
-              className="flex aspect-square items-center justify-center rounded-md bg-gradient-to-br from-brand-blue to-brand-blue-dark p-1.5 text-center text-[9px] font-bold leading-tight text-white"
-            >
-              {b}
-            </div>
-          ))}
         </div>
       ) : kind === "chat" ? (
-        <div className="flex flex-col gap-2 p-4">
-          {blocks.map((b, i) => (
-            <div key={b} className={`flex ${i % 2 === 0 ? "justify-start" : "justify-end"}`}>
-              <div
-                className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
-                  i % 2 === 0 ? "bg-brand-gray text-neutral-700" : "bg-brand-blue text-white"
-                }`}
-              >
-                {b}
+        <div className="flex flex-col">
+          <div className="flex flex-col gap-3 p-4">
+            {blocks.map((b, i) => {
+              const isUser = i % 2 === 0;
+              if (platform === "chatgpt" && !isUser) {
+                return (
+                  <div key={b} className="flex items-start gap-2">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-blue text-white">
+                      <Sparkles size={12} />
+                    </span>
+                    <p className="pt-0.5 text-xs leading-relaxed text-neutral-700">{b}</p>
+                  </div>
+                );
+              }
+              return (
+                <div key={b} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
+                      isUser ? "bg-brand-blue text-white" : "bg-brand-gray text-neutral-700"
+                    }`}
+                  >
+                    {b}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {platform === "chatgpt" && (
+            <div className="flex items-center gap-2 border-t border-brand-border p-3">
+              <div className="flex-1 rounded-full border border-brand-border px-3.5 py-2 text-[11px] text-neutral-400">
+                שאל את ChatGPT...
               </div>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-blue text-white">
+                <Send size={12} />
+              </span>
             </div>
-          ))}
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-2 p-3">
@@ -205,6 +318,35 @@ function MockupVisual({ kind, blocks }: { kind: "chat" | "feed" | "timeline" | "
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function SearchVisual({
+  query,
+  results,
+}: {
+  query: string;
+  results: { url: string; title: string; snippet: string }[];
+}) {
+  return (
+    <div className="mx-auto max-w-md overflow-hidden rounded-2xl border border-brand-border bg-white shadow-sm">
+      <div className="flex items-center gap-2 border-b border-brand-border bg-brand-gray px-3.5 py-2.5">
+        <Search size={14} className="shrink-0 text-neutral-400" />
+        <span className="truncate text-xs text-neutral-600">{query}</span>
+        <Grid3x3 size={14} className="mr-auto shrink-0 text-neutral-300" />
+      </div>
+      <div className="flex flex-col divide-y divide-brand-border">
+        {results.map((r) => (
+          <div key={r.url} className="flex flex-col gap-1 px-4 py-3">
+            <span className="text-[10px] text-emerald-700" dir="ltr">
+              {r.url}
+            </span>
+            <span className="text-sm font-semibold text-brand-blue">{r.title}</span>
+            <span className="text-xs leading-relaxed text-neutral-500">{r.snippet}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -222,7 +364,9 @@ export function LessonVisual({ visual }: { visual: VisualSpec }) {
     case "metrics":
       return <MetricsVisual unit={visual.unit} bars={visual.bars} />;
     case "mockup":
-      return <MockupVisual kind={visual.kind} blocks={visual.blocks} />;
+      return <MockupVisual kind={visual.kind} platform={visual.platform} blocks={visual.blocks} />;
+    case "search":
+      return <SearchVisual query={visual.query} results={visual.results} />;
     default:
       return null;
   }
