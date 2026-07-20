@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Search, ShoppingCart, Menu, X, Zap, GraduationCap } from "lucide-react";
+import { Search, ShoppingCart, Menu, X, Zap, GraduationCap, Bot } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { categories } from "@/data/categories";
 
@@ -54,6 +54,9 @@ export function Header() {
               {c.shortName}
             </Link>
           ))}
+          <Link href="/ads-agent" className="flex items-center gap-1 whitespace-nowrap transition hover:text-brand-blue">
+            <Bot size={16} /> סוכן פרסום
+          </Link>
         </nav>
 
         <form onSubmit={handleSearch} className="mr-auto hidden max-w-xs flex-1 items-center md:flex">
@@ -114,6 +117,13 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
             >
               <GraduationCap size={16} /> הקורסים שלי
+            </Link>
+            <Link
+              href="/ads-agent"
+              className="flex items-center gap-2 rounded-lg px-2 py-2.5 hover:bg-brand-gray"
+              onClick={() => setMenuOpen(false)}
+            >
+              <Bot size={16} /> סוכן פרסום AI
             </Link>
             {categories.map((c) => (
               <Link
